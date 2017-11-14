@@ -1,0 +1,47 @@
+ハードボタンの動作とMIDIメッセージの関係
+
+ポケットミクはMIDI OUTポートを備えているだけでなく、MIDI INもある。
+もしかしたら双方向で通信するソフトもあるのかもしれない。
+
+
+Pocket Miku hard button and midi in messages.
+
+
+1.SysEx
+ポケットミクから飛んでくるボタン関係のSysExとカーボンリボンから発生するMidiショートメッセージがある。
+Hard button generate SysEx
+
+format is like
+f0,43,79,09,11,20,XX,YY,f7
+
+[A]       XX=0x00,YY=0x01
+[I]       XX=0x00,YY=0x02
+[U]       XX=0x00,YY=0x04
+[E]       XX=0x00,YY=0x08
+[O]       XX=0x00,YY=0x10
+[VIBRATO] XX=0x00,YY=0x20
+[SHIFT]   XX=0x00,YY=0x40
+[VOLUME ^] XX=0x01,YY=0x00
+[VOLUME v] XX=0x02,YY=0x00
+複数ボタン同時押し時はXX,YYは論理和になる。例）[A][I][U] 同時押し→ XX=0x00 YY=0x07
+Pressing multiple key, XX, YY is arithmetical OR'd.
+
+2.ShortMessage
+カーボンリボンはショートメッセージっぽい
+
+Carbon Ribon
+Press -> 
+ 
+ Note ON channel 1 note number 0x4e velocity 0x63 example)00634e90
+
+Release ->
+
+ Note OFF channel 1 note_number 0x4e velocity 0x00 example)00004e80
+
+Move->
+
+ Pitch Bend channel1 lowerbyte=?? highbyte =?? example)006136e0
+ 
+ 
+ 3.NSX-1 時
+ この動作に関しては変わりなさそう。
